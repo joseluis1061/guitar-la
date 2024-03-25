@@ -1,12 +1,13 @@
 import "./App.css";
 import Guitar from "./components/Guitar";
 import Header from "./components/Header";
-import { useState } from "react";
-import guitarData from "./components/data";
+import { useEffect, useState } from "react";
+import guitarData from "./data/data";
 
 
 function App() {
   const [data, setData] = useState(guitarData);
+
 
   return (
     <>
@@ -16,8 +17,8 @@ function App() {
 
         <div className="row mt-5">
           {
-            data.map((item, index) => {
-              return <Guitar item={item} key={index}></Guitar>
+            data.map((guitar, index) => {
+              return <Guitar guitar={guitar} key={index}></Guitar>
             })
           }
           
