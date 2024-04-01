@@ -25,7 +25,7 @@ const Header = ({ cart, setCart, removefromCart, incrementQuantity, decrementQua
             <a href="index.html">
               <img
                 className="img-fluid"
-                src="./public/img/logo.svg"
+                src="./img/logo.svg"
                 alt="imagen logo"
               />
             </a>
@@ -34,7 +34,7 @@ const Header = ({ cart, setCart, removefromCart, incrementQuantity, decrementQua
             <div className="carrito">
               <img
                 className="img-fluid"
-                src="./public/img/carrito.png"
+                src="./img/carrito.png"
                 alt="imagen carrito"
               />
 
@@ -61,7 +61,7 @@ const Header = ({ cart, setCart, removefromCart, incrementQuantity, decrementQua
                               <td>
                                 <img
                                   className="img-fluid"
-                                  src={`./public/img/${item.image}.jpg`}
+                                  src={`./img/${item.image}.jpg`}
                                   alt="imagen guitarra"
                                 />
                               </td>
