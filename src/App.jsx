@@ -14,6 +14,10 @@ function App() {
     if(exist === -1){
       item.quantity = 1;
       setCart((prevCart) => [...prevCart, item])
+    }else{
+      const updateCart = [...cart];
+      updateCart[exist].quantity +=1;
+      setCart(updateCart); 
     }
   }
 

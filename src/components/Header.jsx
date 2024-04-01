@@ -1,16 +1,35 @@
+import { useEffect, useState } from "react";
+
 const Header = ({ cart, setCart }) => {
 
+  const[total, setTotal] = useState(0)
 
-  function addElement(n, index){
+  function addToCart(counter, index){
     const updateCart = [...cart];
-    if(n === -1 && updateCart[index].quantity !== 1){
+    if(counter === -1 && updateCart[index].quantity !== 1){
       updateCart[index].quantity += -1;
-      setCart(updateCart)
-    }else if(n === 1){
-      updateCart[index].quantity += n;
-      setCart(updateCart)
+      setCart(updateCart);
+    }else if(counter === 1){
+      updateCart[index].quantity += counter;
+      setCart(updateCart);
     }
   }
+
+  function deleteElement(id){
+    const updateCart = cart.filter(guitar => guitar.id !== id);
+    setCart(updateCart);
+  }
+
+  useEffect(()=> {
+    priceTotal();
+  }, [cart]);
+
+  function priceTotal(){
+    const sum = cart.map( guitar => guitar.price*guitar.quantity);
+    const value = sum.reduce((acumulator, currenPrice) => acumulator+(currenPrice), 0);
+    setTotal(value);
+  }
+  
 
 
   return (
@@ -63,16 +82,16 @@ const Header = ({ cart, setCart }) => {
                               <td>{item.name}</td>
                               <td className="fw-bold">${item.price}</td>
                               <td className="flex align-items-start gap-4">
-                                <button type="button" className="btn btn-dark" onClick={() => addElement(-1, index)}>
+                                <button type="button" className="btn btn-dark" onClick={() => addToCart(-1, index)}>
                                   -
                                 </button>
                                 {item.quantity}
-                                <button type="button" className="btn btn-dark" onClick={() => addElement(1, index)}>
+                                <button type="button" className="btn btn-dark" onClick={() => addToCart(1, index)}>
                                   +
                                 </button>
                               </td>
                               <td>
-                                <button className="btn btn-danger" type="button">
+                                <button className="btn btn-danger" type="button" onClick={() => deleteElement(item.id)}>
                                   X
                                 </button>
                               </td>
@@ -87,9 +106,9 @@ const Header = ({ cart, setCart }) => {
                 </table>
 
                 <p className="text-end">
-                  Total pagar: <span className="fw-bold">$899</span>
+                  Total pagar: <span className="fw-bold">${total}</span>
                 </p>
-                <button className="btn btn-dark w-100 mt-3 p-2">
+                <button className="btn btn-dark w-100 mt-3 p-2" onClick={()=> setCart([])}>
                   Vaciar Carrito
                 </button>
               </div>
