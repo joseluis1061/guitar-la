@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-const Header = ({ cart, setCart }) => {
+const Header = ({ cart, setCart, removefromCart, incrementQuantity, decrementQuantity }) => {
 
-  const[total, setTotal] = useState(0)
+  //Derivate state
+  const isCartEmpty = useMemo(() => cart.length > 0, [cart]);
+  const total = useMemo(() => cart.reduce((acumulator, item)=> acumulator + (item.quantity*item.price), 0), [cart]);  
 
   function addToCart(counter, index){
     const updateCart = [...cart];
@@ -14,23 +16,6 @@ const Header = ({ cart, setCart }) => {
       setCart(updateCart);
     }
   }
-
-  function deleteElement(id){
-    const updateCart = cart.filter(guitar => guitar.id !== id);
-    setCart(updateCart);
-  }
-
-  useEffect(()=> {
-    priceTotal();
-  }, [cart]);
-
-  function priceTotal(){
-    const sum = cart.map( guitar => guitar.price*guitar.quantity);
-    const value = sum.reduce((acumulator, currenPrice) => acumulator+(currenPrice), 0);
-    setTotal(value);
-  }
-  
-
 
   return (
     <header className="py-5 header">
@@ -54,19 +39,20 @@ const Header = ({ cart, setCart }) => {
               />
 
               <div id="carrito" className="bg-white p-3">
-                <p className="text-center">El carrito esta vacio</p>
-
-                <table className="w-100 table">
-                  <thead>
-                    <tr>
-                      <th>Imagen</th>
-                      <th>Nombre</th>
-                      <th>Precio</th>
-                      <th>Cantidad</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
+                {
+                  isCartEmpty? (
+                    <>
+                    <table className="w-100 table">
+                      <thead>
+                        <tr>
+                          <th>Imagen</th>
+                          <th>Nombre</th>
+                          <th>Precio</th>
+                          <th>Cantidad</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
                     
                       {
                         cart.map((item, index) => {
@@ -82,16 +68,16 @@ const Header = ({ cart, setCart }) => {
                               <td>{item.name}</td>
                               <td className="fw-bold">${item.price}</td>
                               <td className="flex align-items-start gap-4">
-                                <button type="button" className="btn btn-dark" onClick={() => addToCart(-1, index)}>
+                                <button type="button" className="btn btn-dark" onClick={() => decrementQuantity(item.id)}>
                                   -
                                 </button>
                                 {item.quantity}
-                                <button type="button" className="btn btn-dark" onClick={() => addToCart(1, index)}>
+                                <button type="button" className="btn btn-dark" onClick={() => incrementQuantity(item.id)}>
                                   +
                                 </button>
                               </td>
                               <td>
-                                <button className="btn btn-danger" type="button" onClick={() => deleteElement(item.id)}>
+                                <button className="btn btn-danger" type="button" onClick={() => removefromCart(item.id)}>
                                   X
                                 </button>
                               </td>
@@ -104,13 +90,20 @@ const Header = ({ cart, setCart }) => {
                       
                   </tbody>
                 </table>
-
                 <p className="text-end">
                   Total pagar: <span className="fw-bold">${total}</span>
                 </p>
+                </>
+                  ) : (<p className="text-center">El carrito esta vacio</p>)
+                }
                 <button className="btn btn-dark w-100 mt-3 p-2" onClick={()=> setCart([])}>
                   Vaciar Carrito
                 </button>
+                
+
+                
+
+                
               </div>
             </div>
           </nav>
